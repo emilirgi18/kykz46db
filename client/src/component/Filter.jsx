@@ -17,23 +17,37 @@ export default class Filter extends Component {
         this.onChangeOneWay = this.onChangeOneWay.bind(this);
         this.onChangeFromDate = this.onChangeFromDate.bind(this);
         this.onChangeToDate = this.onChangeToDate.bind(this);
-        this.onChangeDate = this.onChangeDate.bind(this);
         this.onChangeType = this.onChangeType.bind(this);
         this.onChangeText = this.onChangeText.bind(this);
         this.onChangeMembers = this.onChangeMembers.bind(this);
+        this.onChangeSort = this.onChangeSort.bind(this);
+        this.onChangeBy = this.onChangeBy.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
 
         this.state = {
             range: 'false',
-            date: '',
             activityType: '',
             text: '',
             members: '',
             fromDate: '',
             toDate: '',
+            sort: 'date',
+            by: '-1',
         }
 
     };
+
+    onChangeBy(e) {
+        this.setState( {
+            by: e.target.value
+        })
+    }
+
+    onChangeSort(e) {
+        this.setState({
+            sort: e.target.value
+        })
+    }
 
     onChangeRanged(e) {
         this.setState({
@@ -45,12 +59,6 @@ export default class Filter extends Component {
         this.setState({
             range: e.target.value
         })
-    }
-
-    onChangeDate(date) {
-        this.setState({
-            date: date
-        });
     }
 
     onChangeFromDate(date) {
@@ -85,75 +93,40 @@ export default class Filter extends Component {
 
     onSubmit(e) {
         e.preventDefault();
-        var datePlaceholder = '';
-        var newDate = ''
-        let body = {}
 
-        if(this.state.range === 'false'){
-            if(this.state.date){
-                var year = parseInt(this.state.date.getFullYear(),10)
-                var month = parseInt(this.state.date.getMonth(),10)+1
-                if(month<10){month="0"+month}
-                var day = parseInt(this.state.date.getDate(),10)
-                //console.log(day)
-                if(day<10){day="0"+day}
-                datePlaceholder = year+'-'+month+'-'+day+'T00:00:00Z';
-                //console.log(datePlaceholder)
-                newDate = new Date(datePlaceholder)
-            }
+        var time1=''
+        var time2=''
+
+        if (this.state.fromDate){
+            var month1 = parseInt(this.state.fromDate.getMonth(),10)+1
+            if(month1<10){month1="0"+month1}
+            var day1 = parseInt(this.state.fromDate.getDate(),10)
+            if(day1<10){day1="0"+day1}
+            var year1 = this.state.fromDate.getFullYear()
+            console.log(new Date(year1+'-'+month1+'-'+day1))
+            time1 = new Date(year1+"-"+month1+"-"+day1+"T00:00:00Z")
         }
 
-        if(this.state.range === 'true'){
-            if(this.state.fromDate && this.state.toDate){
-                console.log(this.state.fromDate)
-                console.log(this.state.toDate)
-                var month1 = parseInt(this.state.fromDate.getMonth(),10)+1
-                if(month1<10){month1="0"+month1}
-                var day1 = parseInt(this.state.fromDate.getDate(),10)
-                if(day1<10){day1="0"+day1}
-                var year1 = this.state.fromDate.getFullYear()
-                console.log(new Date(year1+'-'+month1+'-'+day1))
-                var time1 = new Date(year1+"-"+month1+"-"+day1+"T00:00:00Z")
-
-                var month2 = parseInt(this.state.toDate.getMonth(),10)+1
-                if(month2<10){month2="0"+month2}
-                var day2 = parseInt(this.state.toDate.getDate(),10)+1
-                if(day2<10){day2="0"+day2}
-                var year2 = this.state.toDate.getFullYear()
-                var time2 = new Date(year2+"-"+month2+"-"+day2+"T00:00:00Z")
-            }
+        if (this.state.toDate){
+            var month2 = parseInt(this.state.toDate.getMonth(),10)+1
+            if(month2<10){month2="0"+month2}
+            var day2 = parseInt(this.state.toDate.getDate(),10)+1
+            if(day2<10){day2="0"+day2}
+            var year2 = this.state.toDate.getFullYear()
+            time2 = new Date(year2+"-"+month2+"-"+day2+"T00:00:00Z")
         }
 
-        /**
-         * {"$gte": from_date, "$lt": to_date}
-         */
+        var body = {
+            d1: time1,
+            d2: time2,
+            type: this.state.activityType,
+            text: this.state.text,
+            members: this.state.members,
+            sort: this.state.sort,
+            by: this.state.by
+        };
 
-        /**
-         * date: datePlaceholder,
-         type: this.state.activityType,
-         text: this.state.text,
-         members: this.state.members,
-         */
-
-        if(this.state.range === 'true'){
-            body = {
-                d1: time1,
-                d2: time2,
-                type: this.state.activityType,
-                text: this.state.text,
-                members: this.state.members
-            };
-        } else if (this.state.range === 'false'){
-            body = {
-                date: newDate,
-                type: this.state.activityType,
-                text: this.state.text,
-                members: this.state.members
-            };
-        }
-
-        if (this.state.range==='false'){this.props.onSubmit(body)}
-        if (this.state.range==='true'){this.props.onRange(body)}
+        this.props.onSubmit(body)
 
         console.log(body)
     }
@@ -190,25 +163,16 @@ export default class Filter extends Component {
                             <label htmlFor="i12">From-To</label>
                         </div>
                     </div>
-                    {this.state.range === 'false' ?
-                        (<div className="form-group">
-                            <label htmlFor="datepick">Pick a date:</label>
-                            <br/>
-                            <DatePicker0
-                                id="datepick"
-                                selected={this.state.date}
-                                onChange={this.onChangeDate}
-                            />
-                            <br/>
-                        </div>) : null
-                    }
+                     <div className="form-group">
+                         {this.state.range === 'true'? (<div>From:<br/></div>) : (<div>Pick a date:<br /></div>)}
+                         <DatePicker0
+                             selected={this.state.fromDate}
+                             onChange={this.onChangeFromDate}
+                         />
+                         <br/>
+                     </div>
                     {this.state.range === 'true' ?
                         (<div>
-                            From :<br />
-                            <DatePicker1
-                                selected={this.state.fromDate}
-                                onChange={this.onChangeFromDate}
-                            /><br/>
                             To :<br />
                             <DatePicker2
                                 selected={this.state.toDate}
@@ -316,6 +280,18 @@ export default class Filter extends Component {
                             placeholder="Who is/are involved?"
                             onChange={this.onChangeMembers}
                         />
+                    </div>
+                    <div className="form-group">
+                        <label>Sort by:</label>
+                        <br />
+                        <select className="custom-select-sm" onChange={this.onChangeSort}>
+                            <option selected value="date">Date</option>
+                            <option value="type">Type</option>
+                        </select>
+                        <select className="custom-select-sm" onChange={this.onChangeBy}>
+                            <option selected value='-1'>Descending</option>
+                            <option value="1">Ascending</option>
+                        </select>
                     </div>
                     <div className="form-group">
                         <input type="submit"/>

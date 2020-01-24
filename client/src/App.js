@@ -33,12 +33,14 @@ export default class App extends Component{
       var month = parseInt(date.getMonth(),10)+1
       if(month<10){month="0"+month}
       var day = parseInt(date.getDate(),10)
-      //console.log(day)
       if(day<10){day="0"+day}
       datePlaceholder = date.getFullYear()+"-"+month+"-"+day;
     }
     var body = {
-      date: datePlaceholder,
+        d1: datePlaceholder,
+        d2: '',
+        sort: 'date',
+        by: '-1'
     }
     this.handleFilter(body)
   }
@@ -48,34 +50,6 @@ export default class App extends Component{
       showFilter: false,
       showNewActivity: false,
       showTextify: false,
-    })
-  }
-
-  onRange = (payload) => {
-    Axios.post(`http://kykz46db.herokuapp.com/api/ranged`, JSON.stringify(payload), {
-      headers: {
-        'Content-Type': 'application/json; charset=UTF-8'
-      }
-    })
-        .then(response => {
-          //console.log(response)
-          //alert("Activities received!")
-          if(response.data.length){
-            this.setState({
-              pData: response.data,
-              showFilter: false,
-            })
-            //console.log(response.data)
-          }
-          else {alert("No Data Found!")}
-          //this.props.data(response.data);
-        })
-        .catch(error => {
-          console.log(error.response)
-          alert("Activity fail to receive!")
-        });
-    this.setState({
-      showFilter: false,
     })
   }
 
@@ -90,7 +64,8 @@ export default class App extends Component{
           //alert("Activities received!")
           if(response.data.length){
             this.setState({
-              pData: response.data,
+              pData: response.
+data,
               showFilter: false,
             })
             //console.log(response.data)
@@ -189,22 +164,22 @@ export default class App extends Component{
                 <hr />
                 <button
                     onClick={this.FilterClicked.bind(this)}
-                    className="btn btn-primary btn-sm mx-2"
+                    className="btn btn-primary btn-sm mx-2 mb-2"
                 >Find Activity</button>
                 <button
                     onClick={this.NewActivityClicked.bind(this)}
-                    className="btn btn-secondary btn-sm mx-2"
+                    className="btn btn-secondary btn-sm mx-2 mb-2"
                 >Add Activity
                 </button>
+                  <button type="button" className="btn btn-secondary btn-sm mx-2 mb-2" data-toggle="modal" data-target="#staticBackdrop">
+                      About
+                  </button>
                 {this.state.pData.length? (
                     <button
                       onClick={this.textify.bind(this)}
-                      className="btn btn-info btn-sm mx-2"
+                      className="btn btn-info btn-sm mx-2 mb-2"
                     >Textify</button>
                 ) : null}
-                <button type="button" className="btn btn-primary btn-sm mx-2" data-toggle="modal" data-target="#staticBackdrop">
-                  About
-                </button>
                 {this.state.showNewActivity ? <NewActivity onSubmit={this.addThis} /> : null}
                 {this.state.showFilter ? <Filter onRange={this.onRange} onSubmit={this.handleFilter}/> : null}
               </header>
@@ -235,9 +210,12 @@ export default class App extends Component{
                 </div>
                 <div className="modal-body">
                   Hello There!
-                  I am Irgi, also known as <a href="https://www.twitter.com/subjecteighteen">@subjecteighteen</a>.
-                  This app is made to make easier for <a href="https://twitter.com/shuukankeyaki">Shuukan Keyaki</a> Team to recap Keyaki's activities.
+                  I am Irgi, also known as <a target="_blank" href="https://www.twitter.com/subjecteighteen">@subjecteighteen</a>.
+                  This app is made to make easier for <a target="_blank" href="https://twitter.com/shuukankeyaki">Shuukan Keyaki</a> Team to recap Keyaki's activities.
                   If you have any suggestions/anything to say, just mention me. Thanks!
+                    <hr />
+                    You can install this webapp in your phone like a native Android (and <b>maybe</b> iOS) app by clicking 'Add to Home Screen' as shown below.
+                    <img src="webapp.jpg" alt="How to install webapp" className="img-fluid"></img>
                 </div>
                 <div className="modal-footer">
                   <button type="button" className="btn btn-secondary" data-dismiss="modal">Close</button>
