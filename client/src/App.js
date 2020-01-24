@@ -52,7 +52,7 @@ export default class App extends Component{
   }
 
   onRange = (payload) => {
-    Axios.post(`http://kykz46db.herokuapp.com:5000/api/ranged`, JSON.stringify(payload), {
+    Axios.post(`http://kykz46db.herokuapp.com/api/ranged`, JSON.stringify(payload), {
       headers: {
         'Content-Type': 'application/json; charset=UTF-8'
       }
