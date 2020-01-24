@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 //import Axios from "axios";
 import DatePicker0 from 'react-datepicker';
-import DatePicker1 from 'react-datepicker';
 import DatePicker2 from 'react-datepicker';
 
 //import { Activities } from '../api/activities.js';

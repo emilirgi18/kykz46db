@@ -64,8 +64,7 @@ export default class App extends Component{
           //alert("Activities received!")
           if(response.data.length){
             this.setState({
-              pData: response.
-data,
+              pData: response.data,
               showFilter: false,
             })
             //console.log(response.data)
