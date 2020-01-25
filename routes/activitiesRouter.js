@@ -31,7 +31,7 @@ router.route('/get').post((req, res) => {
 
     if(req.body['d2'] !== ''){
         var dp = {
-            date: {$gte: d1, $lte: d2}
+            date: {$gte: d1, $lt: d2}
         }
     } else if (req.body['d1'] !== '') {
         var dp = {
@@ -52,16 +52,18 @@ router.route('/get').post((req, res) => {
             match['date'] = dp['date']
         }
     }
+    var p =''
+    var sort = {}
 
     if(req.body['sort']==='date'){
-        var p = parseInt(req.body['by'], 10)
-        var sort = {
+        p = parseInt(req.body['by'], 10)
+        sort = {
             date: p,
             type: 1
         }
-    } else if (req.body['by']==='type'){
-        var p = parseInt(req.body['by'], 10)
-        var sort = {
+    } else if (req.body['sort']==='type'){
+        p = parseInt(req.body['by'], 10)
+        sort = {
             type: p,
             date: 1
         }

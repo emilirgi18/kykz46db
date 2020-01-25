@@ -209,8 +209,8 @@ export default class App extends Component{
                 </div>
                 <div className="modal-body">
                   Hello There!
-                  I am Irgi, also known as <a target="_blank" href="https://www.twitter.com/subjecteighteen">@subjecteighteen</a>.
-                  This app is made to make easier for <a target="_blank" href="https://twitter.com/shuukankeyaki">Shuukan Keyaki</a> Team to recap Keyaki's activities.
+                  I am Irgi, also known as <a target="_blank" rel="noopener noreferrer" href="https://www.twitter.com/subjecteighteen">@subjecteighteen</a>.
+                  This app is made to make easier for <a target="_blank" rel="noopener noreferrer" href="https://twitter.com/shuukankeyaki">Shuukan Keyaki</a> Team to recap Keyaki's activities.
                   If you have any suggestions/anything to say, just mention me. Thanks!
                     <hr />
                     You can install this webapp in your phone like a native Android (and <b>maybe</b> iOS) app by clicking 'Add to Home Screen' as shown below.

@@ -284,11 +284,11 @@ export default class Filter extends Component {
                         <label>Sort by:</label>
                         <br />
                         <select className="custom-select-sm" onChange={this.onChangeSort}>
-                            <option selected value="date">Date</option>
+                            <option value="date">Date</option>
                             <option value="type">Type</option>
                         </select>
                         <select className="custom-select-sm" onChange={this.onChangeBy}>
-                            <option selected value='-1'>Descending</option>
+                            <option value='-1'>Descending</option>
                             <option value="1">Ascending</option>
                         </select>
                     </div>
